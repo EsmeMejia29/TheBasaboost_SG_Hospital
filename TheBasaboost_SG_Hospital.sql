@@ -10,7 +10,8 @@ CREATE TABLE MEDICO(
 	apellido VARCHAR(25) NOT NULL,
 	telefono INT,
 	horario VARCHAR(50),
-	email VARCHAR(40)
+	email VARCHAR(40),
+	id_especialidad SMALLINT
 );
 
 CREATE TABLE ESPECIALIDAD(
@@ -20,7 +21,10 @@ CREATE TABLE ESPECIALIDAD(
 
 CREATE TABLE CITA(
 	id_cita INT PRIMARY KEY,
-	fecha_hora DATETIME NOT NULL
+	fecha_hora DATETIME NOT NULL,
+	id_paciente INT,
+	id_medico SMALLINT,
+	id_estado SMALLINT
 );
 
 CREATE TABLE ESTADO_CITA(
