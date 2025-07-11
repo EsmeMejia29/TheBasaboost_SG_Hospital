@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS TheBasaboost_SG_Hospital;
 CREATE DATABASE TheBasaboost_SG_Hospital;
 USE TheBasaboost_SG_Hospital;
 
------- CREACIÓN DE LA BASE DE DATOS ------
+------ CREACIÃ“N DE LA BASE DE DATOS ------
 --- TABLAS:
 CREATE TABLE MEDICO(
 	id_medico SMALLINT PRIMARY KEY IDENTITY,
@@ -44,7 +44,7 @@ CREATE TABLE DIAGNOSTICO(
 	diagnostico VARCHAR(75)
 );
 
--- Intersección Consulta-Receta
+-- IntersecciÃ³n Consulta-Receta
 CREATE TABLE CONSULTA_RECETA(
    	id_consulta INT NOT NULL,
    	id_receta SMALLINT NOT NULL,
@@ -55,13 +55,13 @@ CREATE TABLE CONSULTA_RECETA(
 
 CREATE TABLE PACIENTE(
 	id_paciente INT PRIMARY KEY,
-    nombre VARCHAR(50),
-    apellido VARCHAR(50),
-    dui VARCHAR(10),
-    fecha_nacimiento DATE,
-    dirección VARCHAR(100),
-    telefono INT,
-    email VARCHAR(70),
+	nombre VARCHAR(50),
+	apellido VARCHAR(50),
+	dui VARCHAR(10),
+	fecha_nacimiento DATE,
+	direccion VARCHAR(100),
+	telefono INT,
+	email VARCHAR(70),
 	fecha_registro DATE
 );
 
