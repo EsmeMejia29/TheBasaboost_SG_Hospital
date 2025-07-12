@@ -21,31 +21,35 @@ CREATE TABLE ESPECIALIDAD(
 
 CREATE TABLE CITA(
 	id_cita INT PRIMARY KEY,
+	id_paciente INT NOT NULL,
+	id_medico SMALLINT NOT NULL,
+	id_estado SMALLINT NOT NULL,
 	fecha_hora DATETIME NOT NULL,
-	id_paciente INT,
-	id_medico SMALLINT,
-	id_estado SMALLINT
 );
 
 CREATE TABLE ESTADO_CITA(
 	id_estado SMALLINT PRIMARY KEY,
-	estado VARCHAR(15)
+	estado VARCHAR(15) NOT NULL
 );
 
 CREATE TABLE RECETA(
 	id_receta SMALLINT PRIMARY KEY IDENTITY,
+	id_consulta INT,
+	id_tratamiento INT,
 	instrucciones VARCHAR(200)
 );
 
 CREATE TABLE CONSULTA(
 	id_consulta INT PRIMARY KEY IDENTITY,
-	observaciones VARCHAR(250),
+	id_cita INT,
+	id_diagnostico INT,
+	observaciones VARCHAR(250) NOT NULL,
 	fecha_consulta DATE
 );
 
 CREATE TABLE DIAGNOSTICO(
 	id_diagnostico INT PRIMARY KEY IDENTITY,
-	diagnostico VARCHAR(75)
+	diagnostico VARCHAR(75) NOT NULL
 );
 
 -- Intersección Consulta-Receta
@@ -61,17 +65,20 @@ CREATE TABLE PACIENTE(
 	id_paciente INT PRIMARY KEY,
 	nombre VARCHAR(50),
 	apellido VARCHAR(50),
-	dui VARCHAR(10),
+	dui VARCHAR(10) NOT NULL,
 	fecha_nacimiento DATE,
 	direccion VARCHAR(100),
 	telefono INT,
 	email VARCHAR(70),
-	fecha_registro DATE
+	fecha_registro DATE,
+	id_historial_medico INT
 );
 
 CREATE TABLE TRATAMIENTO(
 	id_tratamiento INT PRIMARY KEY IDENTITY,
-	duracion VARCHAR(20)
+	duracion VARCHAR(20) NOT NULL,
+	id_medicamento INT NOT NULL,
+	id_dosis INT NOT NULL
 );
 
 CREATE TABLE MEDICAMENTO(
@@ -86,7 +93,10 @@ CREATE TABLE DOSIS(
 
 CREATE TABLE HISTORIAL_MEDICO(
 	id_historial_medico INT PRIMARY KEY,
-    antecedentes_familiares VARCHAR(200),
+	id_paciente INT,
+	id_alergias SMALLINT,
+	id_enfermedades_cronicas SMALLINT,
+	antecedentes_familiares VARCHAR(200),
 	fecha_registro DATE
 );
 
