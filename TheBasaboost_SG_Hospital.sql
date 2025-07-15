@@ -28,7 +28,7 @@ CREATE TABLE CITA(
 );
 
 CREATE TABLE ESTADO_CITA(
-	id_estado SMALLINT PRIMARY KEY,
+	id_estado SMALLINT PRIMARY KEY IDENTITY,
 	estado VARCHAR(15) NOT NULL
 );
 
@@ -52,14 +52,6 @@ CREATE TABLE DIAGNOSTICO(
 	diagnostico VARCHAR(75) NOT NULL
 );
 
--- Intersección Consulta-Receta
-CREATE TABLE CONSULTA_RECETA(
-   	id_consulta INT NOT NULL,
-   	id_receta SMALLINT NOT NULL,
-  	PRIMARY KEY (id_consulta, id_receta),
-    	FOREIGN KEY (id_consulta) REFERENCES CONSULTA(id_consulta),
-    	FOREIGN KEY (id_receta) REFERENCES RECETA(id_receta)
-);
 
 CREATE TABLE PACIENTE(
 	id_paciente INT PRIMARY KEY,
@@ -101,12 +93,12 @@ CREATE TABLE HISTORIAL_MEDICO(
 );
 
 CREATE TABLE ALERGIAS(
-	id_alergias SMALLINT PRIMARY KEY,
+	id_alergias SMALLINT PRIMARY KEY IDENTITY,
 	alergias VARCHAR(50)
 );
 
 CREATE TABLE ENFERMEDADES_CRONICAS(
-	id_enfermedades_cronicas SMALLINT PRIMARY KEY,
+	id_enfermedades_cronicas SMALLINT PRIMARY KEY IDENTITY,
 	enfermedad_cronica VARCHAR(50)
 );
 
@@ -123,13 +115,10 @@ ALTER TABLE CITA ADD FOREIGN KEY(id_estado) REFERENCES ESTADO_CITA(id_estado);
 ALTER TABLE RECETA ADD FOREIGN KEY(id_consulta) REFERENCES CONSULTA(id_consulta);
 ALTER TABLE RECETA ADD FOREIGN KEY(id_tratamiento) REFERENCES TRATAMIENTO(id_tratamiento);
 
--- PARA LA TABLA INTERMEDIA "CONSULTA_RECETA"
-ALTER TABLE CONSULTA_RECETA ADD FOREIGN KEY (id_consulta) REFERENCES CONSULTA(id_consulta) ON DELETE CASCADE;
-ALTER TABLE CONSULTA_RECETA ADD FOREIGN KEY (id_receta) REFERENCES RECETA(id_receta) ON DELETE CASCADE;
-
 -- PARA LA TABLA "CONSULTA"
 ALTER TABLE CONSULTA ADD FOREIGN KEY(id_cita) REFERENCES CITA(id_cita);
 ALTER TABLE CONSULTA ADD FOREIGN KEY(id_diagnostico) REFERENCES DIAGNOSTICO(id_diagnostico);
+ALTER TABLE CONSULTA ADD FOREIGN KEY(id_receta) REFERENCES RECETA(id_receta);
 
 -- PARA LA TABLA "PACIENTE"
 ALTER TABLE PACIENTE ADD FOREIGN KEY(id_historial_medico) REFERENCES HISTORIAL_MEDICO(id_historial_medico);
@@ -1760,6 +1749,12 @@ INSERT INTO medico (nombre, apellido, telefono, horario, email, id_especialidad)
 ('Rafael', 'Melara Pérez', 61361934, 'martes a viernes 8:00-16:00', 'rafael.melara72@hospital.com', 7),
 ('Nidia', 'Medina Ayala', 66138433, 'lunes a viernes 13:00-21:00', 'nidia.medina73@hospital.com', 16);
 
+
+----------------------------
+---------------------------
+----------------------------
+-- QUITAR LOS ID_CITA (LOS PRIMEROS NUMERITOS)
+-------------------------
 INSERT INTO cita (id_cita, id_paciente, id_medico, id_estado, fecha_hora) VALUES
 (1, 64, 73, 12, '2023-05-15 08:49:00'),
 (2, 262, 8, 11, '2022-08-31 16:41:00'),
@@ -1960,6 +1955,13 @@ INSERT INTO cita (id_cita, id_paciente, id_medico, id_estado, fecha_hora) VALUES
 (197, 279, 43, 1, '2024-03-22 14:54:00'),
 (198, 29, 16, 5, '2023-11-17 15:21:00');
 
+
+
+----------------------------
+---------------------------
+----------------------------
+-- QUITAR LOS ID_CONSULTA (LOS PRIMEROS NUMERITOS)
+-------------------------
 INSERT INTO consulta (id_consulta, id_cita, id_diagnostico, observaciones, fecha_consulta) VALUES
 (1, 197, 145, 'mejoría tras ajuste de dosis.', '2023-03-17'),
 (2, 33, 97, 'paciente refiere dolor de cabeza y mareos.', '2024-02-16'),
@@ -2233,6 +2235,13 @@ INSERT INTO consulta (id_consulta, id_cita, id_diagnostico, observaciones, fecha
 (270, 1, 52, 'seguimiento postoperatorio favorable.', '2024-02-15'),
 (271, 6, 188, 'no presenta fiebre en últimas 24 horas.', '2023-04-30'),
 (272, 90, 172, 'seguimiento de tratamiento, no se observaron signos de alarma.', '2024-07-14');
+
+
+----------------------------
+---------------------------
+----------------------------
+-- QUITAR LOS ID_CITA (LOS PRIMEROS NUMEROS)
+-------------------------
 
 INSERT INTO receta (id_receta, id_consulta, id_tratamiento, instrucciones) VALUES
 (1, 66, 97, 'aplicar capa fina sobre la lesión.'),
