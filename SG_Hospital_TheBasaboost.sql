@@ -84,8 +84,8 @@ CREATE TABLE MEDICAMENTO(
 CREATE TABLE HISTORIAL_MEDICO(
 	id_historial_medico INT PRIMARY KEY IDENTITY,
 	id_paciente INT,
-	id_alergias SMALLINT NULL,
-	id_enfermedades_cronicas SMALLINT NULL,
+	id_alergias SMALLINT,
+	id_enfermedades_cronicas SMALLINT,
 	antecedentes_familiares VARCHAR(200),
 	fecha_registro DATE
 );
