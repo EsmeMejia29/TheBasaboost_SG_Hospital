@@ -397,8 +397,7 @@ INSERT INTO ALERGIAS(alergias) VALUES
 ('Vacunas'),
 ('Plumas'),
 ('Fresas'),
-('Otros'),
-('Ninguna');
+('Otros');
 
 -- PARA LA TABLA "ENFERMEDADES_CRONICAS" (40 inserciones)
 INSERT INTO enfermedades_cronicas (enfermedad_cronica) VALUES
@@ -441,8 +440,7 @@ INSERT INTO enfermedades_cronicas (enfermedad_cronica) VALUES
 ('Esclerosis múltiple'),
 ('Gota'),
 ('Valvulopatía'),
-('Arritmia crónica'),
-('Ninguna');
+('Arritmia crónica');
 
 --------------------------------------------------
 -- Inserciones de las tablas restantes:
@@ -554,6 +552,33 @@ INSERT INTO PACIENTE(nombre, apellido, dui, fecha_nacimiento, direccion, telefon
 ('Julia Elena', 'Chávez de Romero', '03456789-0', '1990-01-23', 'Colonia La Mascota, Residencial Las Acacias #7, San Salvador', 72678901, 'julia.chavez90@gmail.com', '2021-11-18'),
 ('Moisés Israel', 'Romero Alas', '04567890-1', '1985-06-06', 'Colonia San Luis, Av. Los Sisimiles #34, Santa Tecla', 79789012, 'moises.romero85@yahoo.com', '2019-10-25'),
 ('Diana Carolina', 'Alas de Hernández', '05678901-2', '1998-03-19', 'Colonia Escalón, Calle La Reforma #12, San Salvador', 66890123, 'diana.alas98@gmail.com', '2022-04-30');
+('Ana Beatriz', 'López Rodríguez', '01234567-8', '1990-06-22', 'Residencial Altavista, Soyapango', 72123456, 'ana.lopez@gmail.com', '2020-06-15'),
+('Luis Fernando', 'Gómez Rivera', '02345678-9', '1988-12-01', 'Colonia Miramonte, San Salvador', 73111222, 'luis.gomez@gmail.com', '2020-06-20'),
+('María José', 'Castro Méndez', '03456789-0', '1995-05-18', 'Urbanización Santa Elena, Antiguo Cuscatlán', 74566789, 'maria.castro@hotmail.com', '2020-07-01'),
+('José Andrés', 'Martínez Castillo', '05678901-2', '1982-09-30', 'Calle 5 de Noviembre, San Salvador', 79876543, 'jose.martinez@gmail.com', '2020-07-12'),
+('Daniela Sofía', 'Pérez Aguilar', '06789012-3', '1993-04-10', 'Colonia La Sultana, Antiguo Cuscatlán', 76543210, 'daniela.perez@yahoo.com', '2020-08-01'),
+('Ricardo Javier', 'Ramírez Flores', '07890123-4', '1979-07-07', 'Colonia San Francisco, Mejicanos', 77777777, 'ricardo.ramirez@outlook.com', '2020-08-15'),
+('Karla Verónica', 'Ortiz Chávez', '08901234-5', '1996-10-21', 'Colonia Médica, San Salvador', 79000011, 'karla.ortiz@gmail.com', '2020-09-01'),
+('Francisco David', 'Navarro Molina', '09123456-7', '1991-02-28', 'Santa Tecla, La Libertad', 71230044, 'francisco.navarro@gmail.com', '2020-09-12'),
+('Gabriela Elena', 'Mejía Reyes', '10234567-8', '1987-01-13', 'Colonia Guatemala, Soyapango', 72224455, 'gabriela.mejia@gmail.com', '2020-09-25'),
+('Roberto Carlos', 'Zelaya Torres', '11345678-9', '1994-08-08', 'Colonia América, Ilopango', 73115566, 'roberto.zelaya@hotmail.com', '2020-10-05'),
+('Silvia Maribel', 'Campos Romero', '12456789-0', '1990-03-17', 'Colonia Satélite, San Marcos', 79011233, 'silvia.campos@gmail.com', '2020-10-18'),
+('Jorge Luis', 'Fuentes Lara', '13567890-1', '1986-11-25', 'Urbanización La Cima, San Salvador', 76551122, 'jorge.fuentes@gmail.com', '2020-11-01'),
+('Andrea Michelle', 'García López', '14678901-2', '1998-06-09', 'Colonia San Benito, San Salvador', 78965432, 'andrea.garcia@gmail.com', '2020-11-20'),
+('Oscar Daniel', 'Alvarado Mejía', '15789012-3', '1983-12-12', 'Colonia San Antonio, Apopa', 74443322, 'oscar.alvarado@gmail.com', '2020-12-05'),
+('Patricia Eugenia', 'Rivas Hernández', '16890123-4', '1992-02-02', 'Colonia Escalón, San Salvador', 72119988, 'patricia.rivas@gmail.com', '2020-12-20'),
+('Santiago Javier', 'Carranza Bonilla', '17901234-5', '1997-09-14', 'Colonia El Carmen, San Miguel', 75554433, 'santiago.carranza@gmail.com', '2021-01-10'),
+('Mónica Alejandra', 'Vásquez Peña', '18012345-6', '1989-05-29', 'Residencial Los Santos, Santa Tecla', 73223344, 'monica.vasquez@gmail.com', '2021-01-25'),
+('Jonathan Iván', 'Perdomo Arévalo', '19123456-7', '1981-07-06', 'Colonia Flor Blanca, San Salvador', 71225566, 'jonathan.perdomo@gmail.com', '2021-02-12'),
+('Cindy Paola', 'Salazar Domínguez', '20234567-8', '1993-11-03', 'Colonia San Rafael, Mejicanos', 73334455, 'cindy.salazar@gmail.com', '2021-03-01'),
+('Esteban Mauricio', 'Herrera Campos', '21345678-9', '1990-10-10', 'Colonia Miralvalle, San Salvador', 72001144, 'esteban.herrera@gmail.com', '2021-03-18'),
+('Lorena Beatriz', 'Guillén Martínez', '22456789-0', '1986-04-27', 'Colonia Jardines del Volcán, San Salvador', 76554411, 'lorena.guillen@gmail.com', '2021-04-02'),
+('Kevin Rafael', 'Molina Cruz', '23567890-1', '1995-01-19', 'Colonia San José, Santa Ana', 72221133, 'kevin.molina@gmail.com', '2021-04-20'),
+('Natalia Fernanda', 'Vega Romero', '24678901-2', '1999-08-30', 'Colonia Guadalupe, Soyapango', 79880022, 'natalia.vega@gmail.com', '2021-05-10'),
+('Edgar Alfonso', 'Peña Salinas', '25789012-3', '1984-12-05', 'Colonia El Roble, Ahuachapán', 74110099, 'edgar.pena@gmail.com', '2021-06-01'),
+('Brenda Liseth', 'Arévalo López', '26890123-4', '1991-06-06', 'Urbanización Santa Eduviges, Ilopango', 72332244, 'brenda.arevalo@gmail.com', '2021-06-20'),
+('Diego Armando', 'Mendoza Peralta', '27901234-5', '1987-09-22', 'Colonia 10 de Octubre, San Salvador', 79007766, 'diego.mendoza@gmail.com', '2021-07-05'),
+('Isabel Cristina', 'Reyes de González', '28012345-6', '2001-11-17', 'Colonia Los Ángeles, Santa Tecla', 73445566, 'isabel.reyes@gmail.com', '2021-07-18');
 
 -- PARA LA TABLA "CITA" (65 inserciones)
 INSERT INTO CITA(id_paciente, id_medico, id_estado, fecha_hora) VALUES
@@ -595,33 +620,33 @@ INSERT INTO CITA(id_paciente, id_medico, id_estado, fecha_hora) VALUES
 (36, 37, 2, '2023-04-14 08:30:00'),
 (37, 48, 1, '2023-04-17 14:45:00'),
 (38, 59, 2, '2023-04-20 10:15:00'),
-(1, 10, 3, '2023-04-23 15:30:00'),
-(2, 21, 2, '2023-04-26 09:00:00'),
-(3, 32, 1, '2023-04-29 13:15:00'),
-(4, 43, 5, '2023-05-02 16:45:00'),
-(5, 54, 2, '2023-05-05 11:30:00'),
-(6, 5, 1, '2023-05-08 08:15:00'),
-(1, 16, 2, '2023-05-11 14:30:00'),
-(5, 27, 3, '2023-05-14 10:00:00'),
-(9, 38, 2, '2023-05-17 15:15:00'),
-(10, 49, 1, '2023-05-20 09:45:00'),
-(11, 60, 4, '2023-05-23 13:00:00'),
-(20, 11, 2, '2023-05-26 16:30:00'),
-(13, 22, 1, '2023-05-29 11:15:00'),
-(5, 33, 2, '2023-06-01 08:00:00'),
-(2, 44, 3, '2023-06-04 14:45:00'),
-(5, 55, 2, '2023-06-07 10:30:00'),
-(17, 6, 1, '2023-06-10 15:00:00'),
-(18, 17, 5, '2023-06-13 09:15:00'),
-(19, 28, 2, '2023-06-16 13:30:00'),
-(20, 39, 1, '2023-06-19 16:45:00'),
-(8, 50, 2, '2023-06-22 11:00:00'),
-(10, 1, 3, '2023-06-25 08:30:00'),
-(23, 12, 2, '2023-06-28 14:00:00'),
-(4, 23, 1, '2023-07-01 10:15:00'),
-(25, 34, 4, '2023-07-04 15:30:00'),
-(26, 45, 2, '2023-07-07 09:45:00'),
-(4, 56, 1, '2023-07-10 13:00:00');
+(39, 10, 3, '2023-04-23 15:30:00'),
+(40, 21, 2, '2023-04-26 09:00:00'),
+(41, 32, 1, '2023-04-29 13:15:00'),
+(42, 43, 5, '2023-05-02 16:45:00'),
+(43, 54, 2, '2023-05-05 11:30:00'),
+(44, 5, 1, '2023-05-08 08:15:00'),
+(45, 16, 2, '2023-05-11 14:30:00'),
+(46, 27, 3, '2023-05-14 10:00:00'),
+(47, 38, 2, '2023-05-17 15:15:00'),
+(48, 49, 1, '2023-05-20 09:45:00'),
+(49, 60, 4, '2023-05-23 13:00:00'),
+(50, 11, 2, '2023-05-26 16:30:00'),
+(51, 22, 1, '2023-05-29 11:15:00'),
+(52, 33, 2, '2023-06-01 08:00:00'),
+(53, 44, 3, '2023-06-04 14:45:00'),
+(54, 55, 2, '2023-06-07 10:30:00'),
+(55, 6, 1, '2023-06-10 15:00:00'),
+(56, 17, 5, '2023-06-13 09:15:00'),
+(57, 28, 2, '2023-06-16 13:30:00'),
+(58, 39, 1, '2023-06-19 16:45:00'),
+(59, 50, 2, '2023-06-22 11:00:00'),
+(60, 1, 3, '2023-06-25 08:30:00'),
+(61, 12, 2, '2023-06-28 14:00:00'),
+(62, 23, 1, '2023-07-01 10:15:00'),
+(63, 34, 4, '2023-07-04 15:30:00'),
+(64, 45, 2, '2023-07-07 09:45:00'),
+(65, 56, 1, '2023-07-10 13:00:00');
 
 -- PARA LA TABLA "CONSULTA" (65 inserciones)
 INSERT INTO CONSULTA(id_cita, id_diagnostico, observaciones, fecha_consulta) VALUES
@@ -691,7 +716,7 @@ INSERT INTO CONSULTA(id_cita, id_diagnostico, observaciones, fecha_consulta) VAL
 (63, 10, 'Sinusitis crónica. Cirugía recomendada.', '2023-07-04'),
 (65, 25, 'Colecistitis. Colecistectomía programada.', '2023-07-10');
 
--- PARA LA TABLA "RECETA" (65 inserciones)
+-- PARA LA TABLA "RECETA" (66 inserciones)
 INSERT INTO RECETA(id_consulta, id_medicamento, dosis, duracion, instrucciones) VALUES
 (1, 1, '500 mg', 'Cada 8 horas x 7 días', 'Tomar con alimentos'),
 (1, 3, '1 g', 'Cada 12 horas x 10 días', 'Completar tratamiento'),
@@ -704,6 +729,7 @@ INSERT INTO RECETA(id_consulta, id_medicamento, dosis, duracion, instrucciones) 
 (20, 53, '10 mg', 'Cada 24 horas x 7 días', 'Con leche'),
 (18, 49, '50 mg', 'Cada 24 horas x 60 días', 'Evaluar efecto en 4 semanas'),
 (25, 41, '200 mg', 'Cada 12 horas x 30 días', 'No manejar maquinaria'),
+(10, 1, '500 mg', 'Cada 8 horas x 7 días', 'Tomar con alimentos'),
 (3, 15, '5 mg', 'Cada 6 horas x 3 días', 'Para mareos'),
 (7, 22, '10 UI', 'Cada 24 horas x permanente', 'Inyectable subcutáneo'),
 (9, 30, '150 mg', 'Cada 24 horas x 7 días', 'Antiviral'),
@@ -748,7 +774,7 @@ INSERT INTO RECETA(id_consulta, id_medicamento, dosis, duracion, instrucciones) 
 (54, 89, '100 mg', 'Cada 12 horas x 7 días', 'Antiviral herpes'),
 (59, 94, '1 aplicación', 'Cada 12 horas x 14 días', 'Tópico'),
 (62, 17, '50 mg', 'Cada 24 horas x 30 días', 'Anticoagulante'),
-(65, 28, '10 mg', 'Cada 24 horas x permanente', 'Antihipertensivo')
+(65, 28, '10 mg', 'Cada 24 horas x permanente', 'Antihipertensivo');
 
 -- PARA LA TABLA "HISTORIAL_MEDICO" (65 inserciones)
 INSERT INTO HISTORIAL_MEDICO(id_paciente, id_alergias, id_enfermedades_cronicas, antecedentes_familiares, fecha_registro) VALUES
@@ -817,7 +843,6 @@ INSERT INTO HISTORIAL_MEDICO(id_paciente, id_alergias, id_enfermedades_cronicas,
 (63, NULL, NULL, 'Sin antecedentes', '2021-03-10'),
 (64, NULL, NULL, 'Padre con mieloma múltiple', '2020-08-15'),
 (65, NULL, NULL, 'Madre con sarcoidosis', '2019-11-30');
-
 
 
 --###################################################################################################
