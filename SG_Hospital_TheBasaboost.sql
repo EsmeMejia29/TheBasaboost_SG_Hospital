@@ -979,7 +979,10 @@ exec ver_citas_activas @id_paciente = 1;
 -- ver cita en especifíco
 exec ver_citas_activas @id_cita = 5;
 
+########################################################################################################33
+
 --- Vistas
+
 --- 1. Agenda diaria de un médico
 create view vista_agenda_medica_diaria as
 --- Estados de cita que incluímos por defecto:
