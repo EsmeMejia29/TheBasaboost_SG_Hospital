@@ -551,7 +551,7 @@ INSERT INTO PACIENTE(nombre, apellido, dui, fecha_nacimiento, direccion, telefon
 ('Alfredo René', 'Guevara Chávez', '02345678-9', '1977-04-10', 'Colonia La Cima II, Calle Los Pinos #56, San Salvador', 65567890, 'alfredo.guevara77@outlook.com', '2018-08-12'),
 ('Julia Elena', 'Chávez de Romero', '03456789-0', '1990-01-23', 'Colonia La Mascota, Residencial Las Acacias #7, San Salvador', 72678901, 'julia.chavez90@gmail.com', '2021-11-18'),
 ('Moisés Israel', 'Romero Alas', '04567890-1', '1985-06-06', 'Colonia San Luis, Av. Los Sisimiles #34, Santa Tecla', 79789012, 'moises.romero85@yahoo.com', '2019-10-25'),
-('Diana Carolina', 'Alas de Hernández', '05678901-2', '1998-03-19', 'Colonia Escalón, Calle La Reforma #12, San Salvador', 66890123, 'diana.alas98@gmail.com', '2022-04-30');
+('Diana Carolina', 'Alas de Hernández', '05678901-2', '1998-03-19', 'Colonia Escalón, Calle La Reforma #12, San Salvador', 66890123, 'diana.alas98@gmail.com', '2022-04-30'),
 ('Ana Beatriz', 'López Rodríguez', '01234567-8', '1990-06-22', 'Residencial Altavista, Soyapango', 72123456, 'ana.lopez@gmail.com', '2020-06-15'),
 ('Luis Fernando', 'Gómez Rivera', '02345678-9', '1988-12-01', 'Colonia Miramonte, San Salvador', 73111222, 'luis.gomez@gmail.com', '2020-06-20'),
 ('María José', 'Castro Méndez', '03456789-0', '1995-05-18', 'Urbanización Santa Elena, Antiguo Cuscatlán', 74566789, 'maria.castro@hotmail.com', '2020-07-01'),
