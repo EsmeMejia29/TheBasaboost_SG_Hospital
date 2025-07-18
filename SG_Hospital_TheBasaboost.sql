@@ -18,7 +18,7 @@ CREATE TABLE MEDICO(
 	id_medico SMALLINT PRIMARY KEY IDENTITY,
 	nombre VARCHAR(25),
 	apellido VARCHAR(25) NOT NULL,
-	telefono INT,
+	telefono TINYINT,
 	horario VARCHAR(50),
 	email VARCHAR(40),
 	id_especialidad SMALLINT
@@ -84,8 +84,8 @@ CREATE TABLE MEDICAMENTO(
 CREATE TABLE HISTORIAL_MEDICO(
 	id_historial_medico INT PRIMARY KEY IDENTITY,
 	id_paciente INT,
-	id_alergias SMALLINT,
-	id_enfermedades_cronicas SMALLINT,
+	id_alergias SMALLINT NULL,
+	id_enfermedades_cronicas SMALLINT NULL,
 	antecedentes_familiares VARCHAR(200),
 	fecha_registro DATE
 );
