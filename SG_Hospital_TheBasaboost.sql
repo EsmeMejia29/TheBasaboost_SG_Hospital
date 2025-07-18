@@ -815,3 +815,54 @@ INSERT INTO HISTORIAL_MEDICO(id_historial_medico, id_paciente, id_alergias, id_e
 (63, 63, NULL, NULL, 'Sin antecedentes', '2021-03-10'),
 (64, 64, NULL, NULL, 'Padre con mieloma múltiple', '2020-08-15'),
 (65, 65, NULL, NULL, 'Madre con sarcoidosis', '2019-11-30');
+
+
+--###################################################################################################
+--Ejercicios:
+-- *Triggers:
+
+
+-- *Procedimientos almacenados:
+-- 1. Registrar una nueva cita. 
+DROP PROCEDURE IF EXISTS registro_cita;
+CREATE PROCEDURE registro_cita
+	@id_paciente INT,
+	@id_medico SMALLINT,
+	@id_estado SMALLINT,
+	@fecha_hora DATETIME
+AS
+BEGIN
+	INSERT INTO CITA(id_paciente, id_medico, id_estado, fecha_hora) VALUES
+	(@id_paciente, @id_medico, @id_estado, @fecha_hora);
+END;
+
+-- Estos son datos de prueba, puede intentar con otros datos si lo prefiere
+EXEC registro_cita @id_paciente = 3, @id_medico = 16, 
+	@id_estado = 1, @fecha_hora = '2023-07-10 13:00:00';
+
+--Consultas para tener una guia de los datos que se pueden poner en el procedimiento almacenado
+SELECT * FROM PACIENTE;
+SELECT * FROM MEDICO;
+SELECT * FROM ESPECIALIDAD;
+SELECT * FROM ESTADO_CITA;
+SELECT * FROM CITA;
+
+-- 2.Registrar una consulta médica. 
+SELECT * FROM CONSULTA;
+SELECT * FROM DIAGNOSTICO;
+
+DROP PROCEDURE IF EXISTS registro_consulta;
+CREATE PROCEDURE registro_consulta
+	@id_cita INT,
+	@id_diagnostico SMALLINT,
+	@observaciones VARCHAR(250),
+	@fecha DATE
+AS
+BEGIN
+	INSERT INTO CONSULTA(id_cita, id_diagnostico, observaciones, fecha_consulta) VALUES
+	(@id_cita, @id_diagnostico, @observaciones, @fecha);
+END;
+
+-- Estos son datos de prueba, puede intentar con otros datos si lo prefiere
+EXEC registro_consulta @id_cita = 66, @id_diagnostico = 3, @observaciones = 'Dificultad para respirar', @fecha = '2023-07-10';
+
