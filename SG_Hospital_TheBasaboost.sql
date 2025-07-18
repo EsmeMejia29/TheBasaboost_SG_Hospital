@@ -847,10 +847,13 @@ INSERT INTO HISTORIAL_MEDICO(id_paciente, id_alergias, id_enfermedades_cronicas,
 
 --###################################################################################################
 --Ejercicios:
+
 -- *Triggers:
 
+######################################################################################################
 
 -- *Procedimientos almacenados:
+
 -- 1. Registrar una nueva cita. 
 DROP PROCEDURE IF EXISTS registro_cita;
 CREATE PROCEDURE registro_cita
