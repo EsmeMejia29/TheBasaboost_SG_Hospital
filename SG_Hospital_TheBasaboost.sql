@@ -906,14 +906,19 @@ END;
 
 EXEC receta_consulta;
 
--- 4.cBuscar pacientes por nombre o DUI. 
+-- 4.Buscar pacientes por nombre o DUI. 
 DROP PROCEDURE IF EXISTS buscar_paciente_DUI;
 CREATE PROCEDURE buscar_paciente_DUI
-
+	@dui VARCHAR(10)
 AS
 BEGIN
-
+	SELECT * 
+	FROM PACIENTE p
+	WHERE p.dui = @dui
 END;
 
-EXEC buscar_paciente_DUI;
+--DUI de prueba
+EXEC buscar_paciente_DUI @dui = '04567890-1';
 
+--Para ver mas DUIs rapido
+SELECT P.id_paciente, P.nombre, P.apellido, P.dui FROM PACIENTE P;
