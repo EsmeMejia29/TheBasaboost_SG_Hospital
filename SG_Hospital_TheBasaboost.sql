@@ -397,7 +397,8 @@ INSERT INTO ALERGIAS(alergias) VALUES
 ('Vacunas'),
 ('Plumas'),
 ('Fresas'),
-('Otros');
+('Otros'),
+('Ninguna');
 
 -- PARA LA TABLA "ENFERMEDADES_CRONICAS" (40 inserciones)
 INSERT INTO enfermedades_cronicas (enfermedad_cronica) VALUES
@@ -440,7 +441,8 @@ INSERT INTO enfermedades_cronicas (enfermedad_cronica) VALUES
 ('Esclerosis múltiple'),
 ('Gota'),
 ('Valvulopatía'),
-('Arritmia crónica');
+('Arritmia crónica'),
+('Ninguna');
 
 --------------------------------------------------
 -- Inserciones de las tablas restantes:
