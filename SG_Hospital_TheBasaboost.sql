@@ -922,3 +922,59 @@ EXEC buscar_paciente_DUI @dui = '04567890-1';
 
 --Para ver mas DUIs rapido
 SELECT P.id_paciente, P.nombre, P.apellido, P.dui FROM PACIENTE P;
+
+-- 5. ver las citas activas por paciente
+Create procedure ver_citas_activas
+
+---- estos son los parametros que puede utilizar
+    @id_paciente int = null,
+    @id_cita int = null
+as
+begin
+-- primero actualizar citas de prueba a fechas futuras (a modo de ejemplo)
+    update top (10) cita 
+    set fecha_hora = dateadd(day, 7, getdate()),
+        id_estado = case when id_estado = 2 then 1 else id_estado end
+    where id_cita in (1, 2, 5, 10, 15, 20, 25, 30, 35, 40);
+    select 
+	--- se usan '' por el espacio que hay entre los nombres y no genere error
+        c.id_cita,
+        p.nombre + ' ' + p.apellido as paciente,
+        p.dui,
+        m.nombre + ' ' + m.apellido as medico,
+        e.especialidad,
+        ec.estado as estado_cita,
+        c.fecha_hora,
+        datediff(hour, getdate(), c.fecha_hora) as horas_restantes
+    from 
+       cita c
+        inner join paciente p on c.id_paciente = p.id_paciente
+        inner join medico m on c.id_medico = m.id_medico
+        inner join especialidad e on m.id_especialidad = e.id_especialidad
+        inner join estado_cita ec on c.id_estado = ec.id_estado
+    where 
+	-- 1 significa pendiente y 5 urgente. a modo de ejemplo, claro.             
+/*1. pendiente
+  2. atendida
+  3. cancelada
+  4.reprogramada
+  5. urgente*/
+        (c.id_estado = 1 or c.id_estado = 5)  -- 1=pendiente, 5=urgente
+        and (@id_paciente is null or c.id_paciente = @id_paciente)
+        and (@id_cita is null or c.id_cita = @id_cita)
+        and c.fecha_hora > getdate()
+    order by 
+        c.fecha_hora asc;
+end;
+
+--- aquí se muestra el ejemplo de su funcionamiento, con datos de prueba. 
+---- en las inserciones puede verificar e indicar cuál desea consultar.
+
+-- visualizar todas las citas activas
+exec ver_citas_activas;
+
+-- ver citas por paciente
+exec ver_citas_activas @id_paciente = 1;
+
+-- ver cita en especifíco
+exec ver_citas_activas @id_cita = 5;
