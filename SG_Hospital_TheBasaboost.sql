@@ -978,3 +978,210 @@ exec ver_citas_activas @id_paciente = 1;
 
 -- ver cita en especifíco
 exec ver_citas_activas @id_cita = 5;
+
+--- Vistas
+--- 1. Agenda diaria de un médico
+create view vista_agenda_medica_diaria as
+--- Estados de cita que incluímos por defecto:
+  ---1. Pendiente
+  ---2. Atendida
+select 
+    m.id_medico,
+    m.nombre + ' ' + m.apellido as medico,
+    e.especialidad,
+    convert(varchar, c.fecha_hora, 23) as fecha,  
+    c.id_cita,
+    convert(varchar, c.fecha_hora, 108) as hora,  
+    p.nombre + ' ' + p.apellido as paciente,
+    p.dui,
+    p.telefono as telefono_paciente,
+    ec.estado as estado_cita
+from 
+    medico m
+    INNER JOIN cita c on m.id_medico = c.id_medico
+    INNER JOIN paciente p on c.id_paciente = p.id_paciente
+    INNER JOIN especialidad e on m.id_especialidad = e.id_especialidad
+    INNER JOIN estado_cita ec on c.id_estado = ec.id_estado
+where 
+    c.id_estado IN (1, 2)  
+    AND c.fecha_hora >= cast(getdate() as date);
+
+-----Ejemplos para que pueda probar:
+-- Ver agenda completa
+select * from vista_agenda_medica_diaria;
+
+-- Agenda de un médico en específico
+select * from vista_agenda_medica_diaria 
+where id_medico = 23 AND estado_cita = 'Pendiente';
+
+
+---- 2. historial clínico detallado de pacientes
+create view vista_historial_clinico as
+select 
+    p.id_paciente,
+    p.nombre + ' ' + p.apellido as paciente_completo,
+    p.dui,
+    p.fecha_nacimiento,
+    datediff(year, p.fecha_nacimiento, getdate()) as edad,
+    p.direccion,
+    p.telefono,
+    p.email,
+    -- información de alergias
+    isnull(a.alergias, 'ninguna registrada') as alergias,
+    -- enfermedades crónicas
+    isnull(ec.enfermedad_cronica, 'ninguna registrada') as enfermedades_cronicas,   
+    -- antecedentes familiares
+    hm.antecedentes_familiares,
+    -- últimas consultas
+    stuff((
+        select ', ' + convert(varchar, c.fecha_hora, 103) + ' - ' + d.diagnostico
+        from consulta co
+        inner join cita c on co.id_cita = c.id_cita
+        inner join diagnostico d on co.id_diagnostico = d.id_diagnostico
+        where c.id_paciente = p.id_paciente
+        order by c.fecha_hora desc
+        for xml path('')
+    ), 1, 2, '') as ultimas_consultas,
+    -- medicamentos recientes
+    stuff((
+        select ', ' + me.medicamento + ' (' + r.dosis + ')'
+        from receta r
+        inner join consulta co on r.id_consulta = co.id_consulta
+        inner join cita c on co.id_cita = c.id_cita
+        inner join medicamento me on r.id_medicamento = me.id_medicamento
+        where c.id_paciente = p.id_paciente
+        order by c.fecha_hora desc
+        for xml path('')
+    ), 1, 2, '') as medicamentos_recetados
+
+from 
+    paciente p
+    left join historial_medico hm on p.id_paciente = hm.id_paciente
+    left join alergias a on hm.id_alergias = a.id_alergias
+    left join enfermedades_cronicas ec on hm.id_enfermedades_cronicas = ec.id_enfermedades_cronicas;
+
+--- Ejemplos: Se pueden modificar, hay data solo para demostrar su funcionamiento
+-- ver el historial de todos los pacientes
+select * from vista_historial_clinico;
+-- ver historial de un paciente específico por id
+select * from vista_historial_clinico where id_paciente = 1;
+-- buscar pacientes con alergias específicas
+select * from vista_historial_clinico 
+where alergias like '%penicilina%';
+-- pacientes con enfermedades crónicas
+select * from vista_historial_clinico
+where enfermedades_cronicas = 'ninguna registrada';
+-- historial de pacientes mayores de 40 años
+select * from vista_historial_clinico
+where edad > 40;
+
+---- 3. Consultas en el último mes
+create view vista_consultas_ultimo_mes as
+with ultima_fecha as (
+    select MAX(fecha_consulta) as max_fecha 
+    from consulta
+)
+select 
+    c.id_consulta,
+    format(c.fecha_consulta, 'dd/MM/yyyy') as fecha_consulta,
+    p.nombre + ' ' + p.apellido AS paciente,
+    p.dui,
+    m.nombre + ' ' + m.apellido AS medico,
+    e.especialidad,
+    d.diagnostico,
+    c.observaciones,
+    string_agg(me.medicamento + ' (' + r.dosis + ')', ', ') as medicamentos_recetados
+from 
+    consulta c
+    INNER JOIN cita ci on c.id_cita = ci.id_cita
+    INNER JOIN paciente p on ci.id_paciente = p.id_paciente
+    INNER JOIN medico m on ci.id_medico = m.id_medico
+    INNER JOIN especialidad e ON m.id_especialidad = e.id_especialidad
+    INNER JOIN diagnostico d on c.id_diagnostico = d.id_diagnostico
+    LEFT JOIN receta r on c.id_consulta = r.id_consulta
+    LEFT JOIN medicamento me on r.id_medicamento = me.id_medicamento
+    CROSS JOIN ultima_fecha uf
+where 
+    -- Ultimo mes
+    c.fecha_consulta >= dateadd(month, -1, uf.max_fecha)
+    AND c.fecha_consulta <= uf.max_fecha
+group by
+    c.id_consulta,
+    c.fecha_consulta,
+    p.nombre,
+    p.apellido,
+    p.dui,
+    m.nombre,
+    m.apellido,
+    e.especialidad,
+    d.diagnostico,
+    c.observaciones;
+
+----Ejemplos:
+-- ver todas las consultas del último mes
+select * from vista_consultas_ultimo_mes; --- Muy gracioso, solo hay 1 jaja
+
+---- 4. Medicamentos recetados por diágnostico
+create view vista_medicamentos_diagnosticos as
+select 
+    r.id_receta,
+    m.medicamento,
+    r.dosis,
+    r.duracion,
+    r.instrucciones,
+    d.diagnostico,
+    p.nombre + ' ' + p.apellido as paciente,
+    p.dui,
+    med.nombre + ' ' + med.apellido as médico_a_cargo,
+    e.especialidad,
+    format(c.fecha_consulta, 'dd/mm/yyyy') as fecha_consulta
+from 
+    receta r
+    inner join medicamento m on r.id_medicamento = m.id_medicamento
+    inner join consulta c on r.id_consulta = c.id_consulta
+    inner join diagnostico d on c.id_diagnostico = d.id_diagnostico
+    inner join cita ci on c.id_cita = ci.id_cita
+    inner join paciente p on ci.id_paciente = p.id_paciente
+    inner join medico med on ci.id_medico = med.id_medico
+    inner join especialidad e on med.id_especialidad = e.id_especialidad;
+
+-- ver todos los medicamentos recetados por diagnósticos
+select * from vista_medicamentos_diagnosticos;
+
+
+---- 5. Ranking de especialidades más consultadas
+create view vista_ranking_especialidades as
+select
+    e.especialidad,
+    count(c.id_consulta) as total_consultas,
+    concat(format(round(count(c.id_consulta) * 100.0 / 
+        nullif((select count(*) from consulta), 0), 1), 'n1'), '%') as porcentaje_total
+from 
+    consulta c
+    inner join cita ci on c.id_cita = ci.id_cita
+    inner join medico m on ci.id_medico = m.id_medico
+    inner join especialidad e on m.id_especialidad = e.id_especialidad
+group by 
+    e.especialidad;
+
+--- Se puede probar asi:
+select * from vista_ranking_especialidades 
+order by total_consultas desc;
+
+
+--- 6. Ranking de medicinas mas recetadas
+create view vista_ranking_medicinas_recetadas as
+select
+    m.medicamento,
+    count(r.id_receta) as total_recetas,
+    concat(format(round(count(r.id_receta) * 100.0 / 
+        nullif((select count(*) from receta), 0), 1), 'N1'), '%') as porcentaje_total
+from
+    receta r
+    inner join medicamento m on r.id_medicamento = m.id_medicamento
+group by
+    m.medicamento;
+
+--- Se puede probar asi:
+select * from vista_ranking_medicinas_recetadas
+order by total_recetas desc;
