@@ -846,17 +846,85 @@ INSERT INTO HISTORIAL_MEDICO(id_paciente, id_alergias, id_enfermedades_cronicas,
 
 
 --###################################################################################################
---Ejercicios:
+-- SEGURIDAD DE LA BASE
+CREATE SCHEMA seguridad;
 
+-- Log Ins
+
+CREATE LOGIN loginMedico 
+WITH PASSWORD = 'Ale1234';
+
+CREATE LOGIN loginRecepcion 
+WITH PASSWORD = 'Andre12';
+
+
+-- Usuarios 
+CREATE USER usuario_medico
+FOR LOGIN loginMedico 
+WITH DEFAULT_SCHEMA = seguridad;
+
+CREATE USER usuario_recepcion
+FOR LOGIN loginRecepcion 
+WITH DEFAULT_SCHEMA = seguridad;
+
+--###################################################################################################
+
+--Ejercicios:
 -- *Triggers:
 
-######################################################################################################
+
+-- 3. Registrar en log cuando una cita se cancela.
+
+-- Se crea tabla que recibira las citas canceladas para permitir la recuperacion de datos
+
+CREATE TABLE LOG_CITAS_CANCELADAS (
+    id_log INT PRIMARY KEY IDENTITY,
+    id_cita INT,
+    id_paciente INT,
+    id_medico INT,
+    estado_cita VARCHAR(15),
+    fecha_hora DATETIME,
+    motivo_cancelacion VARCHAR(255),
+    fecha_cancelacion DATETIME DEFAULT GETDATE()
+);
+
+-- Trigger
+
+CREATE TRIGGER TRG_LOG_CITA_CANCELADA
+ON CITA
+AFTER UPDATE
+AS
+BEGIN
+    -- Verificar si el estado cambió a 'Cancelada' (id_estado = 3)
+    IF EXISTS (SELECT 1 FROM inserted WHERE id_estado = 3) AND NOT EXISTS (SELECT 1 FROM deleted WHERE id_estado = 3)
+    BEGIN
+        -- Insertar en el log de citas canceladas
+        INSERT INTO LOG_CITAS_CANCELADAS (
+            id_cita, id_paciente, id_medico, estado_cita, fecha_hora, motivo_cancelacion
+        )
+        SELECT 
+            i.id_cita, 
+            i.id_paciente, 
+            i.id_medico, 
+            'Cancelada', 
+            i.fecha_hora, 
+            'Cita cancelada por el paciente o el médico'
+        FROM inserted i;
+    END
+END;
+
+-- EJEMPLO
+UPDATE CITA 
+SET id_estado = 3 
+WHERE id_cita = 1;
+
+-- Se activo el trigger correctamente si hay datos
+SELECT * FROM LOG_CITAS_CANCELADAS;
 
 -- *Procedimientos almacenados:
-
 -- 1. Registrar una nueva cita. 
-DROP PROCEDURE IF EXISTS registro_cita;
-CREATE PROCEDURE registro_cita
+DROP PROCEDURE IF EXISTS seguridad.registro_cita;
+CREATE PROCEDURE seguridad.registro_cita
 	@id_paciente INT,
 	@id_medico SMALLINT,
 	@id_estado SMALLINT,
@@ -868,7 +936,7 @@ BEGIN
 END;
 
 -- Estos son datos de prueba, puede intentar con otros datos si lo prefiere
-EXEC registro_cita @id_paciente = 3, @id_medico = 16, 
+EXEC seguridad.registro_cita @id_paciente = 3, @id_medico = 16, 
 	@id_estado = 1, @fecha_hora = '2023-07-10 13:00:00';
 
 --Consultas para tener una guia de los datos que se pueden poner en el procedimiento almacenado
@@ -882,8 +950,8 @@ SELECT * FROM CITA;
 SELECT * FROM CONSULTA;
 SELECT * FROM DIAGNOSTICO;
 
-DROP PROCEDURE IF EXISTS registro_consulta;
-CREATE PROCEDURE registro_consulta
+DROP PROCEDURE IF EXISTS seguridad.registro_consulta;
+CREATE PROCEDURE seguridad.registro_consulta
 	@id_cita INT,
 	@id_diagnostico SMALLINT,
 	@observaciones VARCHAR(250),
@@ -895,12 +963,11 @@ BEGIN
 END;
 
 -- Estos son datos de prueba, puede intentar con otros datos si lo prefiere
-EXEC registro_consulta @id_cita = 66, @id_diagnostico = 3, @observaciones = 'Dificultad para respirar', @fecha = '2023-07-10';
-
+EXEC seguridad.registro_consulta @id_cita = 66, @id_diagnostico = 3, @observaciones = 'Dificultad para respirar', @fecha = '2023-07-10';
 
 -- 3. Generar una receta para una consulta. 
-DROP PROCEDURE IF EXISTS receta_consulta;
-CREATE PROCEDURE receta_consulta
+DROP PROCEDURE IF EXISTS seguridad.receta_consulta;
+CREATE PROCEDURE seguridad.receta_consulta
 
 AS
 BEGIN
@@ -910,8 +977,8 @@ END;
 EXEC receta_consulta;
 
 -- 4.Buscar pacientes por nombre o DUI. 
-DROP PROCEDURE IF EXISTS buscar_paciente_DUI;
-CREATE PROCEDURE buscar_paciente_DUI
+DROP PROCEDURE IF EXISTS seguridad.buscar_paciente_DUI;
+CREATE PROCEDURE seguridad.buscar_paciente_DUI
 	@dui VARCHAR(10)
 AS
 BEGIN
@@ -921,13 +988,13 @@ BEGIN
 END;
 
 --DUI de prueba
-EXEC buscar_paciente_DUI @dui = '04567890-1';
+EXEC seguridad.buscar_paciente_DUI @dui = '04567890-1';
 
 --Para ver mas DUIs rapido
 SELECT P.id_paciente, P.nombre, P.apellido, P.dui FROM PACIENTE P;
 
 -- 5. ver las citas activas por paciente
-Create procedure ver_citas_activas
+Create procedure seguridad.ver_citas_activas
 
 ---- estos son los parametros que puede utilizar
     @id_paciente int = null,
@@ -974,20 +1041,20 @@ end;
 ---- en las inserciones puede verificar e indicar cuál desea consultar.
 
 -- visualizar todas las citas activas
-exec ver_citas_activas;
+exec seguridad.ver_citas_activas;
 
 -- ver citas por paciente
-exec ver_citas_activas @id_paciente = 1;
+exec seguridad.ver_citas_activas @id_paciente = 1;
 
 -- ver cita en especifíco
-exec ver_citas_activas @id_cita = 5;
+exec seguridad.ver_citas_activas @id_cita = 5;
 
 ########################################################################################################33
 
 --- Vistas
 
 --- 1. Agenda diaria de un médico
-create view vista_agenda_medica_diaria as
+create view seguridad.vista_agenda_medica_diaria as
 --- Estados de cita que incluímos por defecto:
   ---1. Pendiente
   ---2. Atendida
@@ -1014,15 +1081,15 @@ where
 
 -----Ejemplos para que pueda probar:
 -- Ver agenda completa
-select * from vista_agenda_medica_diaria;
+select * from seguridad.vista_agenda_medica_diaria;
 
 -- Agenda de un médico en específico
-select * from vista_agenda_medica_diaria 
+select * from seguridad.vista_agenda_medica_diaria 
 where id_medico = 23 AND estado_cita = 'Pendiente';
 
 
 ---- 2. historial clínico detallado de pacientes
-create view vista_historial_clinico as
+create view seguridad.vista_historial_clinico as
 select 
     p.id_paciente,
     p.nombre + ' ' + p.apellido as paciente_completo,
@@ -1068,21 +1135,21 @@ from
 
 --- Ejemplos: Se pueden modificar, hay data solo para demostrar su funcionamiento
 -- ver el historial de todos los pacientes
-select * from vista_historial_clinico;
+select * from seguridad.vista_historial_clinico;
 -- ver historial de un paciente específico por id
-select * from vista_historial_clinico where id_paciente = 1;
+select * from seguridad.vista_historial_clinico where id_paciente = 1;
 -- buscar pacientes con alergias específicas
-select * from vista_historial_clinico 
+select * from seguridad.vista_historial_clinico 
 where alergias like '%penicilina%';
 -- pacientes con enfermedades crónicas
-select * from vista_historial_clinico
+select * from seguridad.vista_historial_clinico
 where enfermedades_cronicas = 'ninguna registrada';
 -- historial de pacientes mayores de 40 años
-select * from vista_historial_clinico
+select * from seguridad.vista_historial_clinico
 where edad > 40;
 
 ---- 3. Consultas en el último mes
-create view vista_consultas_ultimo_mes as
+create view seguridad.vista_consultas_ultimo_mes as
 with ultima_fecha as (
     select MAX(fecha_consulta) as max_fecha 
     from consulta
@@ -1125,10 +1192,10 @@ group by
 
 ----Ejemplos:
 -- ver todas las consultas del último mes
-select * from vista_consultas_ultimo_mes; --- Muy gracioso, solo hay 1 jaja
+select * from seguridad.vista_consultas_ultimo_mes; --- Muy gracioso, solo hay 1 jaja
 
 ---- 4. Medicamentos recetados por diágnostico
-create view vista_medicamentos_diagnosticos as
+create view seguridad.vista_medicamentos_diagnosticos as
 select 
     r.id_receta,
     m.medicamento,
@@ -1152,11 +1219,11 @@ from
     inner join especialidad e on med.id_especialidad = e.id_especialidad;
 
 -- ver todos los medicamentos recetados por diagnósticos
-select * from vista_medicamentos_diagnosticos;
+select * from seguridad.vista_medicamentos_diagnosticos;
 
 
 ---- 5. Ranking de especialidades más consultadas
-create view vista_ranking_especialidades as
+create view seguridad.vista_ranking_especialidades as
 select
     e.especialidad,
     count(c.id_consulta) as total_consultas,
@@ -1171,12 +1238,12 @@ group by
     e.especialidad;
 
 --- Se puede probar asi:
-select * from vista_ranking_especialidades 
+select * from seguridad.vista_ranking_especialidades 
 order by total_consultas desc;
 
 
 --- 6. Ranking de medicinas mas recetadas
-create view vista_ranking_medicinas_recetadas as
+create view seguridad.vista_ranking_medicinas_recetadas as
 select
     m.medicamento,
     count(r.id_receta) as total_recetas,
@@ -1189,5 +1256,93 @@ group by
     m.medicamento;
 
 --- Se puede probar asi:
-select * from vista_ranking_medicinas_recetadas
+select * from seguridad.vista_ranking_medicinas_recetadas
 order by total_recetas desc;
+
+--###################################################################################################
+
+-- ASIGNACION DE ROLES
+
+CREATE ROLE rol_medico;
+CREATE ROLE rol_recepcion;
+CREATE ROLE rol_reportes;
+
+--- PERMISOS
+-- ROL MEDICO:
+
+-- Permisos para consultar el historial clínico
+GRANT SELECT ON seguridad.vista_historial_clinico TO rol_medico;
+
+-- Permisos para generar recetas
+GRANT EXECUTE ON seguridad.receta_consulta TO rol_medico;
+
+-- Permisos para insertar, eliminar y editar recetas
+GRANT INSERT, DELETE, UPDATE ON RECETA TO rol_medico;
+
+-- Permisos para registrar consultas médicas
+GRANT EXECUTE ON seguridad.registro_consulta TO rol_medico;
+
+-- ROL RECEPCIONISTA:
+
+-- Permisos para CRUD de pacientes
+GRANT SELECT, INSERT, UPDATE, DELETE ON PACIENTE TO rol_recepcion;
+
+-- Permisos para ver citas
+GRANT SELECT ON seguridad.vista_agenda_medica_diaria TO rol_recepcion
+
+-- Permisos para agendar citas
+GRANT EXECUTE ON seguridad.registro_cita TO rol_recepcion;
+
+-- Permisos para CRUD de citas
+GRANT SELECT, INSERT, UPDATE, DELETE ON CITA TO rol_recepcion;
+
+-- ROL REPORTES:
+
+-- Permisos para acceder a vistas de estadísticas
+GRANT SELECT ON seguridad.vista_ranking_especialidades TO rol_reportes;
+GRANT SELECT ON seguridad.vista_ranking_medicinas_recetadas TO rol_reportes;
+GRANT SELECT ON seguridad.vista_consultas_ultimo_mes TO rol_reportes;
+GRANT SELECT ON seguridad.vista_medicamentos_diagnosticos TO rol_reportes;
+
+-- ASIGNACION DE USUARIOS A SUS ROLES
+
+EXEC sp_addrolemember 'rol_medico', 'usuario_medico';
+EXEC sp_addrolemember 'rol_recepcion', 'usuario_recepcion';
+
+--- PRUEBAS DE USUARIOS
+
+-- Para usuario medico:
+EXECUTE AS USER = 'usuario_medico';
+
+-- Intentar consultar el historial clínico (debería funcionar)
+SELECT * FROM seguridad.vista_historial_clinico;
+
+-- Intentar eliminar un paciente (debería fallar)
+DELETE FROM PACIENTE WHERE id_paciente = 1;
+
+-- Intentar generar una receta (debería funcionar)
+EXEC seguridad.receta_consulta;
+
+-- Intentar acceder a vistas de reportes (debería fallar)
+SELECT * FROM seguridad.vista_ranking_especialidades;
+
+-- Terminar la simulación
+REVERT;
+
+-- Para usuario recepcion:
+EXECUTE AS USER = 'usuario_recepcion';
+
+-- Intentar registrar una cita (debería funcionar)
+EXEC seguridad.registro_cita @id_paciente = 1, @id_medico = 2, @id_estado = 1, @fecha_hora = '2023-07-15 09:00:00';
+
+-- Intentar acceder a diagnósticos (debería fallar)
+SELECT * FROM seguridad.vista_medicamentos_diagnosticos;
+
+-- Intentar acceder al historial médico (debería fallar)
+SELECT * FROM seguridad.vista_historial_clinico;
+
+-- Intentar ver citas (debería funcionar)
+SELECT * FROM seguridad.vista_agenda_medica_diaria;
+
+-- Terminar la simulación
+REVERT;
