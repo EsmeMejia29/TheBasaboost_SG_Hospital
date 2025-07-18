@@ -894,3 +894,26 @@ END;
 -- Estos son datos de prueba, puede intentar con otros datos si lo prefiere
 EXEC registro_consulta @id_cita = 66, @id_diagnostico = 3, @observaciones = 'Dificultad para respirar', @fecha = '2023-07-10';
 
+
+-- 3. Generar una receta para una consulta. 
+DROP PROCEDURE IF EXISTS receta_consulta;
+CREATE PROCEDURE receta_consulta
+
+AS
+BEGIN
+
+END;
+
+EXEC receta_consulta;
+
+-- 4.cBuscar pacientes por nombre o DUI. 
+DROP PROCEDURE IF EXISTS buscar_paciente_DUI;
+CREATE PROCEDURE buscar_paciente_DUI
+
+AS
+BEGIN
+
+END;
+
+EXEC buscar_paciente_DUI;
+
