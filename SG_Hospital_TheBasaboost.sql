@@ -18,7 +18,7 @@ CREATE TABLE MEDICO(
 	id_medico SMALLINT PRIMARY KEY IDENTITY,
 	nombre VARCHAR(25),
 	apellido VARCHAR(25) NOT NULL,
-	telefono TINYINT,
+	telefono INT,
 	horario VARCHAR(50),
 	email VARCHAR(40),
 	id_especialidad SMALLINT
