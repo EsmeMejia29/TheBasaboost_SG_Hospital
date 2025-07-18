@@ -71,9 +71,9 @@ CREATE TABLE RECETA(
 	id_receta INT PRIMARY KEY IDENTITY,
 	id_consulta INT,
 	id_medicamento INT,
-	dosis VARCHAR(25),
-	duracion VARCHAR(25),
-	instrucciones VARCHAR(60)
+	dosis VARCHAR(50),
+	duracion VARCHAR(50),
+	instrucciones VARCHAR(100)
 );
 
 CREATE TABLE MEDICAMENTO(
