@@ -1217,49 +1217,62 @@ where id_medico = 23 AND estado_cita = 'Pendiente';
 
 
 ---- 2. historial clínico detallado de pacientes
-create view seguridad.vista_historial_clinico as
-select 
+CREATE seguridad.vista_historial_clinico AS
+SELECT 
     p.id_paciente,
-    p.nombre + ' ' + p.apellido as paciente_completo,
+    p.nombre + ' ' + p.apellido AS paciente_completo,
     p.dui,
     p.fecha_nacimiento,
-    datediff(year, p.fecha_nacimiento, getdate()) as edad,
+    DATEDIFF(YEAR, p.fecha_nacimiento, GETDATE()) AS edad,
     p.direccion,
     p.telefono,
     p.email,
-    -- información de alergias
-    isnull(a.alergias, 'ninguna registrada') as alergias,
-    -- enfermedades crónicas
-    isnull(ec.enfermedad_cronica, 'ninguna registrada') as enfermedades_cronicas,   
-    -- antecedentes familiares
-    hm.antecedentes_familiares,
-    -- últimas consultas
-    stuff((
-        select ', ' + convert(varchar, c.fecha_hora, 103) + ' - ' + d.diagnostico
-        from consulta co
-        inner join cita c on co.id_cita = c.id_cita
-        inner join diagnostico d on co.id_diagnostico = d.id_diagnostico
-        where c.id_paciente = p.id_paciente
-        order by c.fecha_hora desc
-        for xml path('')
-    ), 1, 2, '') as ultimas_consultas,
-    -- medicamentos recientes
-    stuff((
-        select ', ' + me.medicamento + ' (' + r.dosis + ')'
-        from receta r
-        inner join consulta co on r.id_consulta = co.id_consulta
-        inner join cita c on co.id_cita = c.id_cita
-        inner join medicamento me on r.id_medicamento = me.id_medicamento
-        where c.id_paciente = p.id_paciente
-        order by c.fecha_hora desc
-        for xml path('')
-    ), 1, 2, '') as medicamentos_recetados
 
-from 
+    -- Alergias: concatenar todas las alergias del historial médico
+    ISNULL((
+        SELECT STRING_AGG(a.alergias, ', ')
+        FROM historial_medico hm2
+        INNER JOIN historial_alergias ha ON hm2.id_historial_medico = ha.id_historial_medico
+        INNER JOIN alergias a ON ha.id_alergias = a.id_alergias
+        WHERE hm2.id_paciente = p.id_paciente
+    ), 'ninguna registrada') AS alergias,
+
+    -- Enfermedades crónicas: concatenar todas las enfermedades del historial médico
+    ISNULL((
+        SELECT STRING_AGG(ec.enfermedad_cronica, ', ')
+        FROM historial_medico hm3
+        INNER JOIN HISTORIAL_ENF_CRONICAS he ON hm3.id_historial_medico = he.id_enfermedades_cronicas
+        INNER JOIN enfermedades_cronicas ec ON he.id_enfermedades_cronicas = ec.id_enfermedades_cronicas
+        WHERE hm3.id_paciente = p.id_paciente
+    ), 'ninguna registrada') AS enfermedades_cronicas,
+
+    -- Antecedentes familiares
+    hm.antecedentes_familiares,
+
+    -- Últimas consultas
+    STUFF((
+        SELECT ', ' + CONVERT(VARCHAR, c.fecha_hora, 103) + ' - ' + d.diagnostico
+        FROM consulta co
+        INNER JOIN cita c ON co.id_cita = c.id_cita
+        INNER JOIN diagnostico d ON co.id_diagnostico = d.id_diagnostico
+        WHERE c.id_paciente = p.id_paciente
+        ORDER BY c.fecha_hora DESC
+        FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS ultimas_consultas,
+
+    -- Medicamentos recientes
+    STUFF((
+        SELECT ', ' + me.medicamento + ' (' + r.dosis + ')'
+        FROM receta r
+        INNER JOIN consulta co ON r.id_consulta = co.id_consulta
+        INNER JOIN cita c ON co.id_cita = c.id_cita
+        INNER JOIN medicamento me ON r.id_medicamento = me.id_medicamento
+        WHERE c.id_paciente = p.id_paciente
+        ORDER BY c.fecha_hora DESC
+        FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS medicamentos_recetados
+
+FROM 
     paciente p
-    left join historial_medico hm on p.id_paciente = hm.id_paciente
-    left join alergias a on hm.id_alergias = a.id_alergias
-    left join enfermedades_cronicas ec on hm.id_enfermedades_cronicas = ec.id_enfermedades_cronicas;
+    LEFT JOIN historial_medico hm ON p.id_paciente = hm.id_paciente;
 
 --- Ejemplos: Se pueden modificar, hay data solo para demostrar su funcionamiento
 -- ver el historial de todos los pacientes
