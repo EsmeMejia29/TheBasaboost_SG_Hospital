@@ -591,7 +591,9 @@ INSERT INTO PACIENTE(nombre, apellido, dui, fecha_nacimiento, direccion, telefon
 ('Edgar Alfonso', 'Peña Salinas', '25789012-3', '1984-12-05', 'Colonia El Roble, Ahuachapán', 74110099, 'edgar.pena@gmail.com', '2021-06-01'),
 ('Brenda Liseth', 'Arévalo López', '26890123-4', '1991-06-06', 'Urbanización Santa Eduviges, Ilopango', 72332244, 'brenda.arevalo@gmail.com', '2021-06-20'),
 ('Diego Armando', 'Mendoza Peralta', '27901234-5', '1987-09-22', 'Colonia 10 de Octubre, San Salvador', 79007766, 'diego.mendoza@gmail.com', '2021-07-05'),
-('Isabel Cristina', 'Reyes de González', '28012345-6', '2001-11-17', 'Colonia Los Ángeles, Santa Tecla', 73445566, 'isabel.reyes@gmail.com', '2021-07-18');
+('Isabel Cristina', 'Reyes de González', '28012345-6', '2001-11-17', 'Colonia Los Ángeles, Santa Tecla', 73445566, 'isabel.reyes@gmail.com', '2021-07-18'),
+('Ana Beatriz', 'Morales de León', '02000008-9', '1990-07-22', 'Residencial Altavista, Block B #8, Soyapango', 76543210, 'ana.morales@gmail.com', '2021-02-18'),
+('José Manuel', 'Flores Ramírez', '08888888-3', '1978-11-09', 'Barrio El Centro, Avenida Libertad #456, Santa Ana', 78901234, 'jose.flores@hotmail.com', '2019-09-25');
 
 -- PARA LA TABLA "CITA" (65 inserciones)
 INSERT INTO CITA(id_paciente, id_medico, id_estado, fecha_hora) VALUES
