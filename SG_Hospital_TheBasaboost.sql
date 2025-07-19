@@ -1019,8 +1019,8 @@ EXEC seguridad.registro_consulta @id_cita = 66, @id_diagnostico = 3, @observacio
 
 
 -- 3. Generar una receta para una consulta. 
-DROP PROCEDURE IF EXISTS receta_consulta;
-CREATE PROCEDURE receta_consulta
+DROP PROCEDURE IF EXISTS seguridad.receta_consulta;
+CREATE PROCEDURE seguridad.receta_consulta
 	@id_consulta INT,
 	@id_medicamento INT,
 	@dosis VARCHAR(50),
