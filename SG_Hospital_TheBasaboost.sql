@@ -100,6 +100,25 @@ CREATE TABLE ENFERMEDADES_CRONICAS(
 	enfermedad_cronica VARCHAR(50)
 );
 
+CREATE TABLE HISTORIAL_ALERGIAS(
+	id_historial_medico INT,
+	id_alergias SMALLINT,
+	PRIMARY KEY (id_historial_medico, id_alergias)
+);
+
+CREATE TABLE HISTORIAL_ENF_CRONICAS(
+	id_historial_medico INT,
+	id_enfermedades_cronicas SMALLINT,
+	PRIMARY KEY (id_historial_medico, id_enfermedades_cronicas)
+);
+
+ALTER TABLE HISTORIAL_ALERGIAS ADD FOREIGN KEY (id_historial_medico) REFERENCES HISTORIAL_MEDICO(id_historial_medico);
+ALTER TABLE HISTORIAL_ALERGIAS ADD FOREIGN KEY (id_alergias) REFERENCES ALERGIAS(id_alergias);
+
+ALTER TABLE HISTORIAL_ENF_CRONICAS ADD FOREIGN KEY (id_historial_medico) REFERENCES HISTORIAL_MEDICO(id_historial_medico);
+ALTER TABLE HISTORIAL_ENF_CRONICAS ADD FOREIGN KEY (id_enfermedades_cronicas) REFERENCES ENFERMEDADES_CRONICAS(id_enfermedades_cronicas);
+
+
 -- FOREIGN KEYS ---
 -- PARA LA TABLA "MEDICO"
 ALTER TABLE MEDICO ADD FOREIGN KEY(id_especialidad) REFERENCES ESPECIALIDAD(id_especialidad);
