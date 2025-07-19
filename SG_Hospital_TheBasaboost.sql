@@ -901,7 +901,7 @@ CREATE TABLE LOG_CITAS_CANCELADAS (
     fecha_cancelacion DATETIME DEFAULT GETDATE()
 );
 
--- Trigger
+-- 3. Registrar en log cuando una cita se cancela.
 
 CREATE TRIGGER TRG_LOG_CITA_CANCELADA
 ON CITA
@@ -934,6 +934,7 @@ WHERE id_cita = 1;
 -- Se activo el trigger correctamente si hay datos
 SELECT * FROM LOG_CITAS_CANCELADAS;
 
+--##############################################################################################################
 -- *Procedimientos almacenados:
 -- 1. Registrar una nueva cita. 
 DROP PROCEDURE IF EXISTS seguridad.registro_cita;
@@ -976,7 +977,8 @@ BEGIN
 END;
 
 -- Estos son datos de prueba, puede intentar con otros datos si lo prefiere
-EXEC seguridad.registro_consulta @id_cita = 66, @id_diagnostico = 3, @observaciones = 'Dificultad para respirar', @fecha = '2023-07-10';
+EXEC seguridad.registro_consulta @id_cita = 66, @id_diagnostico = 3, @observaciones = 'Sintomas no severos', @fecha = '2023-07-10';
+
 
 -- 3. Generar una receta para una consulta. 
 DROP PROCEDURE IF EXISTS receta_consulta;
@@ -1070,7 +1072,7 @@ exec seguridad.ver_citas_activas @id_paciente = 1;
 -- ver cita en especifíco
 exec seguridad.ver_citas_activas @id_cita = 5;
 
-########################################################################################################33
+--########################################################################################################
 
 --- Vistas
 
