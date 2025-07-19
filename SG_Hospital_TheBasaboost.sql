@@ -871,6 +871,19 @@ WITH DEFAULT_SCHEMA = seguridad;
 
 --Ejercicios:
 -- *Triggers:
+-- 1. Actualizar automáticamente el estado de una cita al registrar una consulta. 
+DROP TRIGGER IF EXISTS trg_ActualizarEstadoCita;
+CREATE TRIGGER trg_ActualizarEstadoCita
+ON CONSULTA
+AFTER INSERT
+AS
+BEGIN
+    UPDATE CITA
+    SET id_estado = (SELECT id_estado FROM ESTADO_CITA WHERE estado = 'Atendida')
+    WHERE id_cita IN (SELECT id_cita FROM INSERTED);
+END;
+
+-- 2. Validar que un médico no tenga citas al mismo tiempo. 
 
 
 -- 3. Registrar en log cuando una cita se cancela.
