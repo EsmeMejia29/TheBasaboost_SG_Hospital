@@ -884,10 +884,31 @@ BEGIN
 END;
 
 -- 2. Validar que un médico no tenga citas al mismo tiempo. 
+CREATE TRIGGER trg_validar_cita_medico
+ON CITA
+INSTEAD OF INSERT
+AS
+BEGIN
+    -- Verificar si el médico ya tiene una cita en la misma fecha y hora
+    IF EXISTS (
+        SELECT 1
+        FROM CITA c
+        JOIN INSERTED i
+            ON c.id_medico = i.id_medico
+            AND c.fecha_hora = i.fecha_hora
+    )
+    BEGIN
+        RAISERROR('El médico ya tiene una cita registrada a esa hora.', 16, 1);
+        RETURN;
+    END
 
+    -- Sino insertar la cita
+    INSERT INTO CITA (id_paciente, id_medico, id_estado, fecha_hora)
+    SELECT id_paciente, id_medico, id_estado, fecha_hora
+    FROM INSERTED;
+END;
 
 -- 3. Registrar en log cuando una cita se cancela.
-
 -- Se crea tabla que recibira las citas canceladas para permitir la recuperacion de datos
 
 CREATE TABLE LOG_CITAS_CANCELADAS (
@@ -900,8 +921,6 @@ CREATE TABLE LOG_CITAS_CANCELADAS (
     motivo_cancelacion VARCHAR(255),
     fecha_cancelacion DATETIME DEFAULT GETDATE()
 );
-
--- 3. Registrar en log cuando una cita se cancela.
 
 CREATE TRIGGER TRG_LOG_CITA_CANCELADA
 ON CITA
