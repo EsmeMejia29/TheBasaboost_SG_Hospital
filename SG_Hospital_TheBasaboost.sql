@@ -84,8 +84,6 @@ CREATE TABLE MEDICAMENTO(
 CREATE TABLE HISTORIAL_MEDICO(
 	id_historial_medico INT PRIMARY KEY IDENTITY,
 	id_paciente INT,
-	id_alergias SMALLINT,
-	id_enfermedades_cronicas SMALLINT,
 	antecedentes_familiares VARCHAR(200),
 	fecha_registro DATE
 );
@@ -112,13 +110,6 @@ CREATE TABLE HISTORIAL_ENF_CRONICAS(
 	PRIMARY KEY (id_historial_medico, id_enfermedades_cronicas)
 );
 
-ALTER TABLE HISTORIAL_ALERGIAS ADD FOREIGN KEY (id_historial_medico) REFERENCES HISTORIAL_MEDICO(id_historial_medico);
-ALTER TABLE HISTORIAL_ALERGIAS ADD FOREIGN KEY (id_alergias) REFERENCES ALERGIAS(id_alergias);
-
-ALTER TABLE HISTORIAL_ENF_CRONICAS ADD FOREIGN KEY (id_historial_medico) REFERENCES HISTORIAL_MEDICO(id_historial_medico);
-ALTER TABLE HISTORIAL_ENF_CRONICAS ADD FOREIGN KEY (id_enfermedades_cronicas) REFERENCES ENFERMEDADES_CRONICAS(id_enfermedades_cronicas);
-
-
 -- FOREIGN KEYS ---
 -- PARA LA TABLA "MEDICO"
 ALTER TABLE MEDICO ADD FOREIGN KEY(id_especialidad) REFERENCES ESPECIALIDAD(id_especialidad);
@@ -138,9 +129,12 @@ ALTER TABLE RECETA ADD FOREIGN KEY(id_medicamento) REFERENCES MEDICAMENTO(id_med
 
 -- PARA LA TABLA "HISTORIAL_MEDICO"
 ALTER TABLE HISTORIAL_MEDICO ADD FOREIGN KEY(id_paciente) REFERENCES PACIENTE(id_paciente);
-ALTER TABLE HISTORIAL_MEDICO ADD FOREIGN KEY(id_alergias) REFERENCES ALERGIAS(id_alergias);
-ALTER TABLE HISTORIAL_MEDICO ADD FOREIGN KEY(id_enfermedades_cronicas) REFERENCES ENFERMEDADES_CRONICAS(id_enfermedades_cronicas);
 
+ALTER TABLE HISTORIAL_ALERGIAS ADD FOREIGN KEY (id_historial_medico) REFERENCES HISTORIAL_MEDICO(id_historial_medico);
+ALTER TABLE HISTORIAL_ALERGIAS ADD FOREIGN KEY (id_alergias) REFERENCES ALERGIAS(id_alergias);
+
+ALTER TABLE HISTORIAL_ENF_CRONICAS ADD FOREIGN KEY (id_historial_medico) REFERENCES HISTORIAL_MEDICO(id_historial_medico);
+ALTER TABLE HISTORIAL_ENF_CRONICAS ADD FOREIGN KEY (id_enfermedades_cronicas) REFERENCES ENFERMEDADES_CRONICAS(id_enfermedades_cronicas);
 -------------------------------------------------------------------------------------------------------------------------------------
 --- INSERCIONES ---
 --------------------------------------------------
@@ -796,73 +790,146 @@ INSERT INTO RECETA(id_consulta, id_medicamento, dosis, duracion, instrucciones) 
 (65, 28, '10 mg', 'Cada 24 horas x permanente', 'Antihipertensivo');
 
 -- PARA LA TABLA "HISTORIAL_MEDICO" (65 inserciones)
-INSERT INTO HISTORIAL_MEDICO(id_paciente, id_alergias, id_enfermedades_cronicas, antecedentes_familiares, fecha_registro) VALUES
-(1, 1, NULL, 'Padre con hipertensión, madre con diabetes', '2020-05-10'),
-(2, 3, 1, 'Abuela materna con cáncer de mama', '2021-02-18'),
-(3, 5, 3, 'Padre y abuelo paterno con EPOC', '2019-11-05'),
-(4, 8, NULL, 'Madre con lupus', '2022-01-15'),
-(5, 10, 5, 'Sin antecedentes familiares relevantes', '2021-07-22'),
-(6, NULL, 2, 'Padres con obesidad', '2020-03-30'),
-(7, NULL, 4, 'Hermano con asma', '2018-09-14'),
-(8, NULL, 6, 'Madre con artritis reumatoide', '2021-04-05'),
-(9, NULL, 7, 'Padre con Alzheimer', '2020-11-20'),
-(10, NULL, 8, 'Abuelo con Parkinson', '2019-08-07'),
-(11, 2, 9, 'Familia con historial cardíaco', '2022-02-28'),
-(12, 4, 10, 'Padre con diabetes tipo 2', '2018-12-10'),
-(13, 6, 11, 'Madre con cáncer de colon', '2021-05-17'),
-(14, 7, 12, 'Hermano con esquizofrenia', '2022-03-01'),
-(15, 9, 13, 'Abuela con osteoporosis', '2020-06-15'),
-(16, NULL, 14, 'Padre con hepatitis B crónica', '2019-04-22'),
-(17, 11, NULL, 'Madre con migraña crónica', '2021-08-30'),
-(18, NULL, 15, 'Sin antecedentes', '2022-01-05'),
-(19, 12, 16, 'Padre con VIH/SIDA', '2020-09-12'),
-(20, NULL, 17, 'Madre con psoriasis', '2022-04-18'),
-(21, 13, NULL, 'Abuelo con demencia', '2019-07-25'),
-(22, NULL, 18, 'Padre con gota', '2020-12-08'),
-(23, 14, 19, 'Madre con esclerosis múltiple', '2022-05-22'),
-(24, NULL, 20, 'Hermano con leucemia', '2021-01-14'),
-(25, 15, NULL, 'Padre con enfisema', '2018-11-30'),
-(26, NULL, 21, 'Madre con fibromialgia', '2021-06-05'),
-(27, 16, NULL, 'Sin antecedentes', '2022-02-15'),
-(28, NULL, 22, 'Padre con cáncer de próstata', '2020-08-19'),
-(29, 17, 23, 'Madre con colitis ulcerativa', '2019-05-28'),
-(30, NULL, 24, 'Abuela con glaucoma', '2022-03-10'),
-(31, NULL, NULL, 'Padre con infarto a los 50 años', '2020-10-17'),
-(32, NULL, NULL, 'Madre con cáncer de ovario', '2019-09-22'),
-(33, NULL, NULL, 'Hermano con diabetes tipo 1', '2021-12-05'),
-(34, NULL, NULL, 'Abuelo con enfermedad de Crohn', '2020-07-30'),
-(35, NULL, NULL, 'Sin antecedentes', '2018-08-12'),
-(36, NULL, NULL, 'Padre con aneurisma cerebral', '2021-11-18'),
-(37, NULL, NULL, 'Madre con esclerodermia', '2020-11-20'),
-(38, NULL, NULL, 'Hermana con lupus', '2022-04-30'),
-(39, NULL, NULL, 'Padre con melanoma', '2020-04-15'),
-(40, NULL, NULL, 'Madre con Alzheimer precoz', '2021-09-10'),
-(41, NULL, NULL, 'Abuelo con EPOC', '2022-06-20'),
-(42, NULL, NULL, 'Sin antecedentes', '2020-02-25'),
-(43, NULL, NULL, 'Padre con cirrosis hepática', '2019-07-15'),
-(44, NULL, NULL, 'Madre con trastorno bipolar', '2021-10-30'),
-(45, NULL, NULL, 'Hermano con autismo', '2022-01-10'),
-(46, NULL, NULL, 'Padre con Parkinson', '2020-11-05'),
-(47, NULL, NULL, 'Madre con esclerosis lateral amiotrófica', '2019-12-20'),
-(48, NULL, NULL, 'Abuela con osteoporosis severa', '2022-03-15'),
-(49, NULL, NULL, 'Sin antecedentes', '2021-02-28'),
-(50, NULL, NULL, 'Padre con cáncer de páncreas', '2020-09-15'),
-(51, NULL, NULL, 'Madre con miastenia gravis', '2019-04-10'),
-(52, NULL, NULL, 'Hermano con cardiopatía congénita', '2022-05-05'),
-(53, NULL, NULL, 'Padre con hepatitis C', '2020-12-20'),
-(54, NULL, NULL, 'Madre con fibromialgia', '2021-08-10'),
-(55, NULL, NULL, 'Abuelo con demencia vascular', '2022-02-15'),
-(56, NULL, NULL, 'Sin antecedentes', '2020-06-30'),
-(57, NULL, NULL, 'Padre con cáncer de estómago', '2019-03-25'),
-(58, NULL, NULL, 'Madre con artritis psoriásica', '2021-07-15'),
-(59, NULL, NULL, 'Hermana con endometriosis', '2022-04-05'),
-(60, NULL, NULL, 'Padre con aneurisma aórtico', '2020-10-10'),
-(61, NULL, NULL, 'Madre con síndrome de Sjögren', '2019-05-20'),
-(62, NULL, NULL, 'Abuelo con enfermedad de Huntington', '2022-01-25'),
-(63, NULL, NULL, 'Sin antecedentes', '2021-03-10'),
-(64, NULL, NULL, 'Padre con mieloma múltiple', '2020-08-15'),
-(65, NULL, NULL, 'Madre con sarcoidosis', '2019-11-30');
+INSERT INTO HISTORIAL_MEDICO(id_paciente, antecedentes_familiares, fecha_registro) VALUES
+(1, 'Padre con hipertensión, madre con diabetes', '2020-05-10'),
+(2, 'Abuela materna con cáncer de mama', '2021-02-18'),
+(3, 'Padre y abuelo paterno con EPOC', '2019-11-05'),
+(4, 'Madre con lupus', '2022-01-15'),
+(5, 'Sin antecedentes familiares relevantes', '2021-07-22'),
+(6, 'Padres con obesidad', '2020-03-30'),
+(7, 'Hermano con asma', '2018-09-14'),
+(8, 'Madre con artritis reumatoide', '2021-04-05'),
+(9, 'Padre con Alzheimer', '2020-11-20'),
+(10, 'Abuelo con Parkinson', '2019-08-07'),
+(11, 'Familia con historial cardíaco', '2022-02-28'),
+(12, 'Padre con diabetes tipo 2', '2018-12-10'),
+(13, 'Madre con cáncer de colon', '2021-05-17'),
+(14, 'Hermano con esquizofrenia', '2022-03-01'),
+(15, 'Abuela con osteoporosis', '2020-06-15'),
+(16, 'Padre con hepatitis B crónica', '2019-04-22'),
+(17, 'Madre con migraña crónica', '2021-08-30'),
+(18, 'Sin antecedentes', '2022-01-05'),
+(19, 'Padre con VIH/SIDA', '2020-09-12'),
+(20, 'Madre con psoriasis', '2022-04-18'),
+(21, 'Abuelo con demencia', '2019-07-25'),
+(22, 'Padre con gota', '2020-12-08'),
+(23, 'Madre con esclerosis múltiple', '2022-05-22'),
+(24, 'Hermano con leucemia', '2021-01-14'),
+(25, 'Padre con enfisema', '2018-11-30'),
+(26, 'Madre con fibromialgia', '2021-06-05'),
+(27, 'Sin antecedentes', '2022-02-15'),
+(28, 'Padre con cáncer de próstata', '2020-08-19'),
+(29, 'Madre con colitis ulcerativa', '2019-05-28'),
+(30, 'Abuela con glaucoma', '2022-03-10'),
+(31, 'Padre con infarto a los 50 años', '2020-10-17'),
+(32, 'Madre con cáncer de ovario', '2019-09-22'),
+(33, 'Hermano con diabetes tipo 1', '2021-12-05'),
+(34, 'Abuelo con enfermedad de Crohn', '2020-07-30'),
+(35, 'Sin antecedentes', '2018-08-12'),
+(36, 'Padre con aneurisma cerebral', '2021-11-18'),
+(37, 'Madre con esclerodermia', '2020-11-20'),
+(38, 'Hermana con lupus', '2022-04-30'),
+(39, 'Padre con melanoma', '2020-04-15'),
+(40, 'Madre con Alzheimer precoz', '2021-09-10'),
+(41, 'Abuelo con EPOC', '2022-06-20'),
+(42, 'Sin antecedentes', '2020-02-25'),
+(43, 'Padre con cirrosis hepática', '2019-07-15'),
+(44, 'Madre con trastorno bipolar', '2021-10-30'),
+(45, 'Hermano con autismo', '2022-01-10'),
+(46, 'Padre con Parkinson', '2020-11-05'),
+(47, 'Madre con esclerosis lateral amiotrófica', '2019-12-20'),
+(48, 'Abuela con osteoporosis severa', '2022-03-15'),
+(49, 'Sin antecedentes', '2021-02-28'),
+(50, 'Padre con cáncer de páncreas', '2020-09-15'),
+(51, 'Madre con miastenia gravis', '2019-04-10'),
+(52, 'Hermano con cardiopatía congénita', '2022-05-05'),
+(53, 'Padre con hepatitis C', '2020-12-20'),
+(54, 'Madre con fibromialgia', '2021-08-10'),
+(55, 'Abuelo con demencia vascular', '2022-02-15'),
+(56, 'Sin antecedentes', '2020-06-30'),
+(57, 'Padre con cáncer de estómago', '2019-03-25'),
+(58, 'Madre con artritis psoriásica', '2021-07-15'),
+(59, 'Hermana con endometriosis', '2022-04-05'),
+(60, 'Padre con aneurisma aórtico', '2020-10-10'),
+(61, 'Madre con síndrome de Sjögren', '2019-05-20'),
+(62, 'Abuelo con enfermedad de Huntington', '2022-01-25'),
+(63, 'Sin antecedentes', '2021-03-10'),
+(64, 'Padre con mieloma múltiple', '2020-08-15'),
+(65, 'Madre con sarcoidosis', '2019-11-30');
 
+INSERT INTO HISTORIAL_ALERGIAS VALUES
+(1, 2),
+(1, 3),
+(2, 1),
+(3, 4),
+(3, 1),
+(3, 5),
+(4, 6),
+(5, 7),
+(6, 7),
+(8, 8),
+(9, 10),
+(10, 9),
+(11, 4),
+(20, 11),
+(23, 12),
+(28, 12),
+(32, 13),
+(37, 14),
+(38, 15),
+(39, 15),
+(43, 15),
+(43, 16),
+(44, 17),
+(45, 18),
+(45, 19),
+(50, 20),
+(53, 21),
+(54, 22),
+(54, 23),
+(55, 24),
+(58, 25),
+(59, 26),
+(60, 26),
+(60, 27),
+(60, 1),
+(62, 5),
+(63, 9);
+
+INSERT INTO HISTORIAL_ENF_CRONICAS VALUES
+(1, 2),
+(1, 3),
+(2, 1),
+(2, 4),
+(4, 6),
+(5, 7),
+(6, 7),
+(7, 8),
+(8, 10),
+(9, 9),
+(10, 4),
+(11, 11),
+(15, 12),
+(25, 34),
+(32, 13),
+(37, 14),
+(38, 15),
+(39, 39),
+(43, 40),
+(43, 16),
+(44, 17),
+(45, 18),
+(45, 19),
+(50, 20),
+(53, 21),
+(54, 22),
+(54, 23),
+(55, 24),
+(58, 25),
+(59, 26),
+(61, 26),
+(61, 29),
+(63, 30);
 
 --###################################################################################################
 -- SEGURIDAD DE LA BASE
