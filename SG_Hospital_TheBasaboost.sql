@@ -966,15 +966,23 @@ END;
 EXEC seguridad.registro_consulta @id_cita = 66, @id_diagnostico = 3, @observaciones = 'Dificultad para respirar', @fecha = '2023-07-10';
 
 -- 3. Generar una receta para una consulta. 
-DROP PROCEDURE IF EXISTS seguridad.receta_consulta;
-CREATE PROCEDURE seguridad.receta_consulta
-
+DROP PROCEDURE IF EXISTS receta_consulta;
+CREATE PROCEDURE receta_consulta
+	@id_consulta INT,
+	@id_medicamento INT,
+	@dosis VARCHAR(50),
+	@duracion VARCHAR(50),
+	@instrucciones VARCHAR(100)
 AS
 BEGIN
-
+	INSERT INTO RECETA(id_consulta, id_medicamento, dosis, duracion, instrucciones) VALUES
+	(@id_consulta, @id_medicamento, @dosis, @duracion, @instrucciones);
 END;
 
-EXEC receta_consulta;
+EXEC receta_consulta @id_consulta = 66, @id_medicamento = 3, @dosis = '10 mg', @duracion = 'Cada 12 horas x 6 dias', @instrucciones = 'Tomar despues de comer';
+
+SELECT * FROM MEDICAMENTO;
+SELECT * FROM RECETA;
 
 -- 4.Buscar pacientes por nombre o DUI. 
 DROP PROCEDURE IF EXISTS seguridad.buscar_paciente_DUI;
